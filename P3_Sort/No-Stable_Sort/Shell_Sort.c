@@ -18,9 +18,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+//希尔排序的实质就是分组插入排序,该方法又称缩小增量排序，因DL.Shell于1959年提出而得名。
+//该方法的基本思想:先将整个待排元素序列分割成若干个子序列(由相隔某个"增量"的元素组成)分别进行
+//直接插入排序，然后依次缩减增量再进行排序，待整个序列中的元素基本有序(增量足够小)时，再对全体
+//元素进行一次直接插入排序
 //希尔排序原始实现  变步长的插入排序
-//时间复杂度高于O(n^2)
+//时间复杂度高于O((nlogn)^2)
 void Shell_Sort(int *array,int length)
 {
 	int gap,temp,i,j,step;
@@ -57,7 +60,7 @@ void Shell_Sort(int *array,int length)
 void Shell_Sort1(int *array,int length)
 {
 	int gap,temp,i,j;
-	for(gap=length/2;gap>0;gap/2)
+	for(gap=length/2;gap>0;gap=gap/2)
 	{
 		for(i=gap;i<length;i++)
 		{
