@@ -57,10 +57,11 @@ void Shell_Sort(int *array,int length)
 }
 
 //希尔排序改进
-void Shell_Sort1(int *array,int length)
+void Shell_Sort1(int *array,int length,int d)
 {
 	int gap,temp,i,j;
-	for(gap=length/2;gap>0;gap=gap/2)
+
+	for(gap=d;gap>0;gap=gap/2)
 	{
 		for(i=gap;i<length;i++)
 		{
@@ -75,12 +76,17 @@ void Shell_Sort1(int *array,int length)
 				}
 				array[j+gap]=temp;
 			}
+			printf("***index:%d***\n",i);
+			for(j=0;j<length;j++)
+				printf("%d ",array[j]);
+			printf("\n");
 		}
 
-		printf("gap:%d\n",gap);
+		printf("***gap:%d***\n",gap);
 		for(i=0;i<length;i++)
 			printf("%d ",array[i]);
 		printf("\n");
+		printf("*******************\n");
 	}
 
 }
@@ -118,7 +124,8 @@ main ( int argc, char *argv[] )
 
 	printf("\n");
 
-	Shell_Sort(a,length);
+	//Shell_Sort(a,length);
+	Shell_Sort1(a,length,2);
 
 	printf("\nthe array sorted:\n");
 	for(i=0;i<length;i++)
