@@ -35,6 +35,7 @@
 //当M接近于N时，桶排序的时间复杂度可近似认为是O(N)的。就是桶越多，时间效率越高，但是空间消耗越大
 
 //将待排序的值作为辅助数组的索引进行标记
+//下面的桶排序相当于使用了maxNumber个桶，即变成了计数排序
 void Bucket_Sort(int array[],int length,int maxNumber)
 {
 	int temp_array[maxNumber+1];

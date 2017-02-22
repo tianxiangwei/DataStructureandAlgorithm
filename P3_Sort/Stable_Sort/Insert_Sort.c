@@ -68,6 +68,7 @@ void Insert_Sort(int array[],int length)
 		}
 		array[j+1]=temp;
 		printf("\n");
+		printf("***the %d round***\n",i);
 		for(n=0;n<length;n++)
 			printf("%d ",array[n]);
 	}
@@ -99,8 +100,8 @@ main ( int argc, char *argv[] )
 
 	printf("\n");
 
-	//Insert_Sort(a,length);
-	Binary_Insert_Sort(a,length);
+	Insert_Sort(a,length);
+	//Binary_Insert_Sort(a,length);
 
 	printf("\nthe array sorted:\n");
 	for(i=0;i<length;i++)

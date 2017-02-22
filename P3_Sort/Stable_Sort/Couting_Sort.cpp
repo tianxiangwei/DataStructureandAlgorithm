@@ -20,8 +20,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-//假定有一个待排序的数组array,其中元素的最小值不小于0，最大值不大于maxN.
+//计数排序
+//假定有一个待排序的数组array,其中元素的最小值不小于0，最大值不大于maxNumber.
 //建立一个长度为maxNumber的线性表temp_array,用来记录不大于每个值的元素的个数
 //算法思路如下:
 //1.扫描待排序序列array,以array中的值为索引把出现的个数记录进temp_array中，此时temp_array[i]可以表示array中值为i的元素的个数
@@ -30,6 +30,32 @@
 
 //时间复杂度 O(n+k),n为数组长度即length,k为最大值即maxNumber
 void Couting_Sort(int array[],int array_res[],int length,int maxNumber)
+{
+	int temp_array[maxNumber+1];
+	int Order[maxNumber+1];
+	int i,j,k=0;
+	
+	memset(temp_array,0,(maxNumber+1)*sizeof(int));
+
+	/*数组值做索引记录出现次数*/
+	for(i=0;i<length;i++)
+	{
+		temp_array[array[i]]++;
+	}
+
+	printf("*******************\n");
+	for(i=0;i<=maxNumber;i++)
+		printf("%d ",temp_array[i]);
+	printf("\n*****************\n");
+
+	for(i=0;i<=maxNumber;i++)
+	{
+		for(j=0;j<temp_array[i];j++)
+			array_res[k++]=i;
+	}
+}
+
+void Couting_Sort1(int array[],int array_res[],int length,int maxNumber)
 {
 	int temp_array[maxNumber+1];
 	int Order[maxNumber+1];
@@ -46,6 +72,11 @@ void Couting_Sort(int array[],int array_res[],int length,int maxNumber)
 	{
 		temp_array[i]+=temp_array[i-1];//统计不大与i的元素的个数
 	}
+
+	printf("*******************\n");
+	for(i=0;i<=maxNumber;i++)
+		printf("%d ",temp_array[i]);
+	printf("\n*****************\n");
 
 	for(i=length-1;i>=0;i--)
 	{
