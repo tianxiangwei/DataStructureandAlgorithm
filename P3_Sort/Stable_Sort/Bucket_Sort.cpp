@@ -14,12 +14,17 @@
  *   Organization:  
  *
  * =====================================================================================
- */
 
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <iostream>
+#include <vector>
+#include <list>
+#include <numeric>
+#include <algorithm>
+using namespace std;
 
 //首先定义桶，桶为一个数据容器，每个桶存储一个区间内的数.
 //待排序的数据array,元素的最小值不小于0，最大值不超过maxNumber
@@ -33,10 +38,11 @@
 //每个桶中的元素平均个数为N/M，如果每个桶中的元素采用快速排序则每次排序的时间复杂度为
 //O(N/Mlog(N/M)).则总的时间复杂度为O(N)+O(M)O(N/Mlog(N/M))=O(N+Nlog(N/M))=O(N+NlogN-NlogM)
 //当M接近于N时，桶排序的时间复杂度可近似认为是O(N)的。就是桶越多，时间效率越高，但是空间消耗越大
+//array中元素放桶的方法即映射函数很关键，假设映射函数为f，则对于数据元素k1<k2,那么f(k1)<f(k2)
 
 //将待排序的值作为辅助数组的索引进行标记
 //下面的桶排序相当于使用了maxNumber个桶，即变成了计数排序
-void Bucket_Sort(int array[],int length,int maxNumber)
+/*void Bucket_Sort(int array[],int length,int maxNumber)
 {
 	int temp_array[maxNumber+1];
 	int i,j,count=0;
@@ -61,15 +67,52 @@ void Bucket_Sort(int array[],int length,int maxNumber)
 			}
 		}
 	}
-}
+}*/
+
+class BucketSort
+{
+	public:
+		int f(int x)
+		{
+			return x/10;
+		}
+
+		void bucket_Sort(int arr[],int length)
+		{
+			int bucketNum=10;
+			
+			vector< list<int> > buckets=new vector< list<int> >;
+			for(int i=0;i<bucketNum;i++)
+				buckets.add(new LinkedList<int>());
+
+			for(int i=0;i<length;i++)
+				buckets.get(f(arr[i]).add(arr[i]);
+
+			for(int i=0;i<buckets.size();i++)
+			{
+				if(!buckets.get(i).isEmpty())
+				{
+					Collections.sort(buckets.get(i));/*对每个桶进行快速排序*/
+				}
+			}
+
+			int k=0;
+			for(list<int> bucket:buckets)
+			{
+				for(int ele:bucket)
+					arr[k++]=ele;
+			}
+		}
+
+};
+
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  main
  *  Description:  
  * =====================================================================================
  */
-	int
-main ( int argc, char *argv[] )
+int main ()
 {
 	int i=0;
 	int a[20];
@@ -94,7 +137,10 @@ main ( int argc, char *argv[] )
 
 	printf("\n");
 
-	Bucket_Sort(a,length,max);
+	//Bucket_Sort(a,length,max);
+	BucketSort bsort;
+	bsort.bucket_Sort(a);
+	
 
 	printf("\nthe array sorted:\n");
 	for(i=0;i<length;i++)
