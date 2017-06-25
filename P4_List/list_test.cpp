@@ -280,7 +280,7 @@ list_node * findIntersectNode(list_node *h1,list_node *h2)
 }
 
 
-//O(1)时间删除链表节点，从无头单链表中输出节点
+//O(1)时间删除链表节点，从无头单链表中删除节点
 void deleteRandomNode(list_node *cur)
 {
 	list_node *pnext;
