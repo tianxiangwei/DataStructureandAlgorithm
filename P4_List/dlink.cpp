@@ -17,10 +17,17 @@ void reverse(Node **head)
 	// 1-->2-->3, 假设2为current.
 	while (current != NULL)
 	{
-		temp = current->prev; //temp=1
+
+        std::cout<<"*************"<<endl;
+		std::cout<<"prev:"<<current->prev<<"current:"<<current<<"next:"<<current->next<<endl;
+		
+        
+        temp = current->prev; //temp=1
 		current->prev = current->next; //3-->2
 		current->next = temp;            //2-->1 
 		current = current->prev; //3-->2-->1, current变为3，继续往后循环。
+		
+        
 	}
 	//总结：先处理前向指针，然后处理后向指针。这些操作都只对当前节点(current),不涉及其它节点。
 	//1.缓存前向指针
@@ -73,9 +80,9 @@ int main()
 	push(&head, 0);
 	push(&head, 2);
 	push(&head, 4);
-	push(&head, 6);
-	push(&head, 8);
-	push(&head, 10);
+	//push(&head, 6);
+	//push(&head, 8);
+	//push(&head, 10);
 
 	std::cout << "Original DLL is: ";
 	printList(head);
