@@ -93,13 +93,17 @@ list_node * RevertByRecursion(list_node *head)
 	return newhead;
 }
 
+//输入一个单向链表，输出该链表中倒数第k个节点，链表的倒是第0个节点为链表的尾指针
+//分析:设置两个指针p1,p2，首先p1和2都指向head,然后p2向前走k步，这样p1和p2之间就间隔k个节点,
+//最后p2和p2同时向前移动，直至p2走到链表末尾
+
 list_node * theKthNode(list_node *head,int k)
 {
 	list_node *before_node,*after_node;
 	if(head==NULL)
 		return NULL;
 	before_node=after_node=head;
-	int count=k-1;
+	int count=k;
 	while(after_node&&count--)
 	{
 		after_node=after_node->m_next;
@@ -138,12 +142,16 @@ list_node * theKthNode1(list_node *head,int k)
 	return before_node;
 }
 
+//求链表的中间节点，如果链表长度为偶数，返回中间两个节点中的任意一个，若为奇数，则返回中间节点
+
 list_node * theMidNode(list_node *head)
 {
 	list_node *fast,*slow;
 	if (head==NULL)
 		return NULL;
 	fast=slow=head;
+	//如果要求在链表长度为偶数的情况下，返回中间两个节点中的第一个，则用如下循环
+	//while(fast&&fast->m_next!=NULL&&fast->m_next->m_next!=NULL)
 	while(fast&&fast->m_next)
 	{
 		slow=slow->m_next;
@@ -152,6 +160,7 @@ list_node * theMidNode(list_node *head)
 	return slow;
 }
 
+//判断链表是否有环
 bool hasCircle(list_node *head,list_node **circleNode)
 {
 	list_node *fast,*slow;
@@ -172,6 +181,9 @@ bool hasCircle(list_node *head,list_node **circleNode)
 }
 
 
+//输入一个单向链表，判断链表是否有环，如果有环，找到环的入口点
+//分析：按照上述判断有环的方法，p2每次走两步，p1每次一步的方法，如果p2和p1重合则确定单向链表有环，
+//接下来让p2回到链表的头部，重新走，每次步长为1，则p1和p2再次相遇的点即为环的入口点 
 list_node * findLoopPort(list_node *head)
 {
 	list_node *fast,*slow;
@@ -217,7 +229,7 @@ bool isIntersect(list_node *h1,list_node *h2)
 }
 
 //判断有环的链表是否相交
-//如果有环且两个链表相交，则两个链表都有共同的一个环，即换上的任意一个节点都存在于两个链表上。
+//如果有环且两个链表相交，则两个链表都有共同的一个环，即环上的任意一个节点都存在于两个链表上。
 //因此，就可以判断一链表上两指针相遇的那个节点，在不在另一个链表上。
 bool isIntersectWithLoop(list_node *h1,list_node* h2)
 {
@@ -280,7 +292,8 @@ list_node * findIntersectNode(list_node *h1,list_node *h2)
 }
 
 
-//O(1)时间删除链表节点，从无头单链表中输出节点
+//O(1)时间删除链表节点，从无头单链表中删除节点
+//即用下一个节点数据覆盖要删除的节点，然后删除下一个节点 因此也要求待删除的节点不能是尾节点
 void deleteRandomNode(list_node *cur)
 {
 	list_node *pnext;
