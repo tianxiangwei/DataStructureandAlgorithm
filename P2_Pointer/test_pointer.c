@@ -52,6 +52,6 @@ main ( int argc, char *argv[] )
 
 	strcpy(temp_str,"mytest");
 	p=test(temp_str);
-	printf("temp_str:%s %p p:%p\n",temp_str,temp_str,p);
+	printf("temp_str:%s %p p:%s %p\n",temp_str,temp_str,p,p);
 	return EXIT_SUCCESS;
 }				/* ----------  end of function main  ---------- */
