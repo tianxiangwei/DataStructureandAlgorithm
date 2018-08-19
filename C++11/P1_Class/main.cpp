@@ -15,11 +15,30 @@ void callme1(StringBad &rsb)
     cout<<"rsb:"<<rsb<<endl;
 }
 
+//按值传递对象涉及到生成临时拷贝,即调用复制构造函数，然后调用析构函数，调用这些函数需要时间
+//复制大型对象比传递引用花费的时间要多得多
 void callme2(StringBad sb)
 {
     printf("sb:%p &sb:%p\n",sb, &sb);
     cout<<"String passed by value"<<endl;
     cout<<"sb:"<<sb<<endl;
+}
+
+
+StringBad callme3(StringBad sb)
+{
+    printf("sb:%p &sb:%p\n",sb, &sb);
+    cout<<"String passed by value"<<endl;
+    cout<<"sb:"<<sb<<endl;
+    return StringBad(sb);
+}
+
+StringBad &callme4(StringBad &sb)
+{
+    printf("sb:%p &sb:%p\n",sb, &sb);
+    cout<<"String passed by reference"<<endl;
+    cout<<"sb:"<<sb<<endl;
+    return sb;
 }
 
 int main()
@@ -98,6 +117,22 @@ int main()
     knot = headline1;
     cout<<"knot:"<<knot<<endl;
     printf("knot:%p &knot:%p\n", knot, &knot);
+
+    cout<<endl;
+    StringBad testnode1;
+    //调用转换构造函数生成对象 StringBad(const char *s)
+    testnode1 = "this is test";
+    printf("test_node1:%p\n",testnode1);
+
+    //函数参数按值传递
+    cout<<endl;
+    StringBad testnode2 = callme3(testnode1);
+    printf("testnode2:%p\n", testnode2);
+    //函数参数按引用传递
+    cout<<endl;
+    StringBad &testnode3 = callme4(testnode1);
+    printf("testnode3:%p\n", testnode3);
+    
     cout<<"\nExiting the main"<<endl;
     cout<<"order of deconstructor rever of constructor"<<endl;
     delete ptest;
