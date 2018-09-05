@@ -27,10 +27,12 @@ void callme2(StringBad sb)
 
 StringBad callme3(StringBad sb)
 {
+    //按值传递参数调用拷贝构造函数
     printf("sb:%p &sb:%p\n",sb, &sb);
     cout<<"String passed by value"<<endl;
     cout<<"sb:"<<sb<<endl;
-    return StringBad(sb);
+    //return StringBad(sb);
+    return sb;
 }
 
 StringBad &callme4(StringBad &sb)
@@ -56,12 +58,31 @@ int main()
 
     std:;vector<StringBad> _data_buffer;
     std::vector<StringBad *> _circur_buffer;
-    cout<<"begin to resize, default constructor"<<endl;
-    _data_buffer.resize(1);
+    //cout<<"begin to resize, default constructor"<<endl;
+    //_data_buffer.resize(1);
 
+    _data_buffer.clear();
+    //事先给vector分配好内存，不会在第二次push_back时对第一次push_back的值进行拷贝构造
+    _data_buffer.reserve(2);
     cout<<"\nbegin to push back"<<endl;
-    _data_buffer.push_back(StringBad("test node"));
+    _data_buffer.push_back(StringBad("test1 node"));
+    _data_buffer.push_back(StringBad("test2 node"));
+    printf("capacity:%lu size:%lu\n", _data_buffer.capacity(), _data_buffer.size());
     //create 2 StringBad node
+
+    cout<<""<<endl;
+    cout<<"vecotr back"<<endl;
+    StringBad node1 = _data_buffer.back();
+    //_data_buffer.back();
+    //apollo_circur_buffer.push_back(&_data_buffer.back());
+    //printf("_circur_buffer[0]:%p\n", _circur_buffer[0]);
+    
+    cout<<"\nclear vector"<<endl;
+    _data_buffer.clear();
+
+    cout<<"\nbegin to emplace back"<<endl;
+    // _data_buffer.emplace_back(StringBad("emplace node"));
+    _data_buffer.emplace_back("emplace node");
 
     cout<<""<<endl;
     StringBad *test_node=&_data_buffer.back();
@@ -126,6 +147,7 @@ int main()
 
     //函数参数按值传递
     cout<<endl;
+    cout<<"callme3"<<endl;
     StringBad testnode2 = callme3(testnode1);
     printf("testnode2:%p\n", testnode2);
     //函数参数按引用传递
