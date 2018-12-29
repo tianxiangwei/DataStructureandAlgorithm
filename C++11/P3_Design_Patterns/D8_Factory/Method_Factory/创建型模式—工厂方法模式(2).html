@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)https://www.cnblogs.com/5iedu/p/5493296.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="origin">
+<title>第4章 创建型模式—工厂方法模式(2) - 浅墨浓香 - 博客园</title>
+<meta property="og:description" content="2. 工厂方法模式 2.1工厂方法模式的定义 （1）定义一个用于创建对象的接口，让子类决定实例化哪一个类，工厂模式使一个类的实例化延迟到其子类 ①Product：定义了工厂方法创建对象的接口。也就是实">
+<link type="text/css" rel="stylesheet" href="./创建型模式—工厂方法模式(2)_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./创建型模式—工厂方法模式(2)_files/bundle-HabaHaba.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./创建型模式—工厂方法模式(2)_files/bundle-HabaHaba-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/5iedu/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/5iedu/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/5iedu/wlwmanifest.xml">
+<script async="" src="./创建型模式—工厂方法模式(2)_files/analytics.js"></script><script type="text/javascript" src="./创建型模式—工厂方法模式(2)_files/encoder.js"></script><script src="./创建型模式—工厂方法模式(2)_files/jquery-2.2.0.min.js"></script>
+<script type="text/javascript">var currentBlogApp = '5iedu', cb_enable_mathjax=true;var isLogined=false;</script>
+<script type="text/x-mathjax-config;executed=true">
+    MathJax.Hub.Config({
+        tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']], processClass: 'math', processEscapes: true },
+        TeX: { 
+            equationNumbers: { autoNumber: ['AMS'], useLabelIds: true }, extensions: ['extpfeil.js'] 
+        },
+        'HTML-CSS': { linebreaks: { automatic: true } },
+        SVG: { linebreaks: { automatic: true } }
+        });
+    </script><script src="./创建型模式—工厂方法模式(2)_files/MathJax.js"></script>
+<script src="./创建型模式—工厂方法模式(2)_files/blog-common.js" type="text/javascript"></script>
+<style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 5px 0px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 1px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuLabel {padding: 1px 2em 3px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #DDDDDD; margin: 4px 3px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: #606872; color: white}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+<body><div id="MathJax_Message" style="display: none;"></div>
+<a name="top"></a>
+
+<table width="100%" class="Framework" cellspacing="0" cellpadding="0">
+	<tbody><tr>
+		<td colspan="2">
+			
+<div id="top">
+<table width="100%" cellpadding="8" cellspacing="0">
+	<tbody><tr>
+		<td nowrap="">
+			<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="https://www.cnblogs.com/5iedu/">浅墨浓香</a></h1>
+			想要天亮进城，就得天黑赶路。
+		</td>
+	</tr>
+</tbody></table>
+</div>
+<div id="sub"><div id="blog_stats">
+<div class="BlogStats">posts - 660, comments - 46, trackbacks - 0, articles - 16</div></div></div>
+
+
+</td>
+	</tr>
+	<tr>
+		<td class="LeftCell">
+			<div id="leftmenu">
+                
+                    
+<h3>导航</h3>
+<ul>
+	<li>
+		<a id="blog_nav_sitehome" href="https://www.cnblogs.com/">博客园</a>
+	</li><li>
+		<a id="blog_nav_myhome" href="https://www.cnblogs.com/5iedu/">首页</a>
+	</li><li>
+		<a id="blog_nav_newpost" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a>
+	</li><li>
+		<a id="blog_nav_contact" accesskey="9" rel="nofollow" href="https://msg.cnblogs.com/send/%E6%B5%85%E5%A2%A8%E6%B5%93%E9%A6%99">联系</a>
+	</li><li>
+		<a id="blog_nav_rss_image" href="https://www.cnblogs.com/5iedu/rss"><img src="./创建型模式—工厂方法模式(2)_files/xml.gif" alt="订阅"></a><a id="blog_nav_rss" href="https://www.cnblogs.com/5iedu/rss">订阅</a>
+	</li><li>
+		<a id="blog_nav_admin" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+
+                    
+<h3>公告</h3>
+<div id="news">
+	<div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/5iedu/">浅墨浓香</a><br>园龄：<a href="https://home.cnblogs.com/u/5iedu/" title="入园时间：2015-06-10">3年6个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/5iedu/followers/">116</a><br>关注：<a href="https://home.cnblogs.com/u/5iedu/followees/">0</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;41562de4-020f-e511-b908-9dcfd8948a71&#39;)">+加关注</a></div><script>getFollowStatus('41562de4-020f-e511-b908-9dcfd8948a71')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+                    <div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2018/11/01&#39;);return false;">&lt;</a></td><td align="center">2018年12月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/01/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">25</td><td class="CalOtherMonthDay" align="center">26</td><td class="CalOtherMonthDay" align="center">27</td><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td class="CalWeekendDay" align="center">1</td></tr><tr><td class="CalWeekendDay" align="center">2</td><td align="center">3</td><td align="center">4</td><td align="center">5</td><td align="center">6</td><td align="center">7</td><td class="CalWeekendDay" align="center">8</td></tr><tr><td class="CalWeekendDay" align="center">9</td><td align="center">10</td><td align="center">11</td><td align="center">12</td><td align="center">13</td><td align="center">14</td><td class="CalWeekendDay" align="center">15</td></tr><tr><td class="CalWeekendDay" align="center">16</td><td align="center">17</td><td align="center">18</td><td align="center">19</td><td align="center">20</td><td align="center">21</td><td class="CalWeekendDay" align="center">22</td></tr><tr><td class="CalWeekendDay" align="center">23</td><td align="center">24</td><td align="center">25</td><td align="center">26</td><td class="CalTodayDay" align="center">27</td><td align="center">28</td><td class="CalWeekendDay" align="center">29</td></tr><tr><td class="CalWeekendDay" align="center">30</td><td align="center">31</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+                    <div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/5iedu/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="https://www.cnblogs.com/5iedu/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="https://www.cnblogs.com/5iedu/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="https://www.cnblogs.com/5iedu/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="https://www.cnblogs.com/5iedu/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+
+</div></div><div id="sidebar_toptags" class="sidebar-block"></div><div id="sidebar_categories">
+		<h3>随笔分类</h3>
+		
+				<ul>
+			
+				<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/5iedu/category/811805.html">C++深度解析(73)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/5iedu/category/804081.html">C语言进阶剖析(48)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_2" href="https://www.cnblogs.com/5iedu/category/911906.html">Linux基础与系统管理(35)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_3" href="https://www.cnblogs.com/5iedu/category/937714.html">Linux应用与网络编程(64)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_4" href="https://www.cnblogs.com/5iedu/category/1005833.html">lua(3)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_5" href="https://www.cnblogs.com/5iedu/category/1005832.html">makefile(10)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_6" href="https://www.cnblogs.com/5iedu/category/819307.html">QT实验分析教程(85)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_7" href="https://www.cnblogs.com/5iedu/category/699743.html">Windows程序设计(58)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_8" href="https://www.cnblogs.com/5iedu/category/699744.html">Windows核心编程(57)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_9" href="https://www.cnblogs.com/5iedu/category/994985.html">计算机网络原理(54)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_10" href="https://www.cnblogs.com/5iedu/category/825371.html">设计模式(41)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_11" href="https://www.cnblogs.com/5iedu/category/1007185.html">深入应用C++11(27)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_12" href="https://www.cnblogs.com/5iedu/category/911523.html">数据结构实战分析(79)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_13" href="https://www.cnblogs.com/5iedu/category/888633.html">重构(9)</a></li>
+			
+				<li><a id="CatList_LinkList_0_Link_14" href="https://www.cnblogs.com/5iedu/category/963515.html">专业嵌入式软件开发(15)</a></li>
+			
+				</ul>
+			
+	
+		<h3>随笔档案</h3>
+		
+				<ul>
+			
+				<li><a id="CatList_LinkList_1_Link_0" href="https://www.cnblogs.com/5iedu/archive/2017/12.html">2017年12月 (13)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_1" href="https://www.cnblogs.com/5iedu/archive/2017/11.html">2017年11月 (23)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_2" href="https://www.cnblogs.com/5iedu/archive/2017/10.html">2017年10月 (21)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_3" href="https://www.cnblogs.com/5iedu/archive/2017/09.html">2017年9月 (8)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_4" href="https://www.cnblogs.com/5iedu/archive/2017/08.html">2017年8月 (22)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_5" href="https://www.cnblogs.com/5iedu/archive/2017/07.html">2017年7月 (27)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_6" href="https://www.cnblogs.com/5iedu/archive/2017/06.html">2017年6月 (21)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_7" href="https://www.cnblogs.com/5iedu/archive/2017/05.html">2017年5月 (35)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_8" href="https://www.cnblogs.com/5iedu/archive/2017/04.html">2017年4月 (19)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_9" href="https://www.cnblogs.com/5iedu/archive/2017/03.html">2017年3月 (28)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_10" href="https://www.cnblogs.com/5iedu/archive/2017/02.html">2017年2月 (15)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_11" href="https://www.cnblogs.com/5iedu/archive/2017/01.html">2017年1月 (51)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_12" href="https://www.cnblogs.com/5iedu/archive/2016/12.html">2016年12月 (26)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_13" href="https://www.cnblogs.com/5iedu/archive/2016/11.html">2016年11月 (20)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_14" href="https://www.cnblogs.com/5iedu/archive/2016/10.html">2016年10月 (13)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_15" href="https://www.cnblogs.com/5iedu/archive/2016/09.html">2016年9月 (8)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_16" href="https://www.cnblogs.com/5iedu/archive/2016/08.html">2016年8月 (11)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_17" href="https://www.cnblogs.com/5iedu/archive/2016/07.html">2016年7月 (24)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_18" href="https://www.cnblogs.com/5iedu/archive/2016/06.html">2016年6月 (26)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_19" href="https://www.cnblogs.com/5iedu/archive/2016/05.html">2016年5月 (34)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_20" href="https://www.cnblogs.com/5iedu/archive/2016/04.html">2016年4月 (73)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_21" href="https://www.cnblogs.com/5iedu/archive/2016/03.html">2016年3月 (33)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_22" href="https://www.cnblogs.com/5iedu/archive/2016/02.html">2016年2月 (7)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_23" href="https://www.cnblogs.com/5iedu/archive/2015/12.html">2015年12月 (2)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_24" href="https://www.cnblogs.com/5iedu/archive/2015/11.html">2015年11月 (4)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_25" href="https://www.cnblogs.com/5iedu/archive/2015/10.html">2015年10月 (7)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_26" href="https://www.cnblogs.com/5iedu/archive/2015/09.html">2015年9月 (6)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_27" href="https://www.cnblogs.com/5iedu/archive/2015/08.html">2015年8月 (54)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_28" href="https://www.cnblogs.com/5iedu/archive/2015/07.html">2015年7月 (25)</a></li>
+			
+				<li><a id="CatList_LinkList_1_Link_29" href="https://www.cnblogs.com/5iedu/archive/2015/06.html">2015年6月 (4)</a></li>
+			
+				</ul>
+			
+	
+		<h3>文章分类</h3>
+		
+				<ul>
+			
+				<li><a id="CatList_LinkList_2_Link_0" href="https://www.cnblogs.com/5iedu/category/715136.html">Windows内核(1)</a></li>
+			
+				<li><a id="CatList_LinkList_2_Link_1" href="https://www.cnblogs.com/5iedu/category/729402.html">编程经验(12)</a></li>
+			
+				<li><a id="CatList_LinkList_2_Link_2" href="https://www.cnblogs.com/5iedu/category/812154.html">常用代码(2)</a></li>
+			
+				<li><a id="CatList_LinkList_2_Link_3" href="https://www.cnblogs.com/5iedu/category/954364.html">综合案例(1)</a></li>
+			
+				</ul>
+			
+	
+		<h3>相册</h3>
+		
+				<ul>
+			
+				<li><a id="CatList_LinkList_3_Link_0" href="https://www.cnblogs.com/5iedu/gallery/718135.html" rel="nofollow">笔记插图</a></li>
+			
+				</ul>
+			
+	</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<h3 class="catListTitle">最新评论</h3>
+<div class="RecentComment" id="RecentComments">
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/5iedu/p/7366808.html#4140555">1. Re:第10章 网络安全（3）_安全套接字层SSL</a></li>
+        <li class="recent_comment_body">这篇文章写的不错，以前不明白的问题现在解决了，看了这篇文章后，我又继续听了这个课程，解决了一些以前不明白的问题，所以把课程推荐给有这方面迷惑的小伙伴，希望能帮到大家！一个系统、全面讲解传统加密通信SS......</li>
+        <li class="recent_comment_author">--合月</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/5iedu/p/7698710.html#4120473">2. Re:第14课 右值引用（1）_基本概念</a></li>
+        <li class="recent_comment_body">一直对右值引用似懂非懂，这下算是懂了。终于明白标准库为啥那么多的std::forward了，也明白完美转发到底什么目的。</li>
+        <li class="recent_comment_author">--点苍苔1990</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/5iedu/p/7625355.html#4115408">3. Re:第5课 模板的细节改进（2）_模板模板参数</a></li>
+        <li class="recent_comment_body">模板的模板参数的默认模板参数需要指定吗？感觉没有意义啊。比如你上面那个写的那个栈的例子。模板的声明写成这样也行啊：template class CONT = std::deque&gt;class Stac......</li>
+        <li class="recent_comment_author">--点苍苔1990</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/5iedu/p/6931617.html#4115146">4. Re:第2课 类型推导（2）_decltype关键字</a></li>
+        <li class="recent_comment_body">class Test{public: int a = 3; const int&amp; b = 4;};Test func() {return Test();}decltype( (func().........</li>
+        <li class="recent_comment_author">--点苍苔1990</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/5iedu/p/7698710.html#4114279">5. Re:第14课 右值引用（1）_基本概念</a></li>
+        <li class="recent_comment_body">再膜拜一下。</li>
+        <li class="recent_comment_author">--点苍苔1990</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<h3 class="catListTitle">阅读排行榜</h3>
+<div class="RecentComment" id="TopViewPosts"> 
+	<div id="TopViewPostsBlock"><ul><li><a href="https://www.cnblogs.com/5iedu/p/5595153.html">1. 第17章 行为型模式—解释器模式(6571)</a></li><li><a href="https://www.cnblogs.com/5iedu/p/4899791.html">2. 第17章 内存映射文件（1）_内存映射文件简介(3269)</a></li><li><a href="https://www.cnblogs.com/5iedu/p/7095041.html">3. 第6章 静态路由和动态路由（4）_OSPF动态路由协议(3095)</a></li><li><a href="https://www.cnblogs.com/5iedu/p/7698710.html">4. 第14课 右值引用（1）_基本概念(3055)</a></li><li><a href="https://www.cnblogs.com/5iedu/p/7376543.html">5. 第11章 拾遗1：网络地址转换(NAT)和端口映射(2589)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<h3 class="catListTitle">评论排行榜</h3>
+<div class="RecentComment" id="TopCommentsPosts">
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="https://www.cnblogs.com/5iedu/p/6498326.html">1. 第83课 另一种创建线程的方式(9)</a></li><li><a href="https://www.cnblogs.com/5iedu/p/5429059.html">2. 第7课 Qt中的坐标系统(4)</a></li><li><a href="https://www.cnblogs.com/5iedu/p/5835715.html">3. 第37课 深度解析QMap与QHash(3)</a></li><li><a href="https://www.cnblogs.com/5iedu/p/5617055.html">4. 第56课 函数模板的概念和意义(2)</a></li><li><a href="https://www.cnblogs.com/5iedu/p/5412417.html">5. 第31课 完善的复数类(2)</a></li></ul></div>
+</div></div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div class="RecentComment">
+	<div id="TopDiggPostsBlock"><ul><li><a href="https://www.cnblogs.com/5iedu/p/4812259.html">1. 第11章 Windows线程池（2）_Win2008及以上的新线程池(2)</a></li><li><a href="https://www.cnblogs.com/5iedu/p/5367317.html">2. 第5课 引用的本质分析(2)</a></li><li><a href="https://www.cnblogs.com/5iedu/p/5363054.html">3. 第1课 学习 C++ 的意义(2)</a></li><li><a href="https://www.cnblogs.com/5iedu/p/6800234.html">4. 第1章 计算机网络和协议（1）_网络的概念(2)</a></li><li><a href="https://www.cnblogs.com/5iedu/p/6413976.html">5. 第9章 线程编程（3）_线程清理和控制函数(1)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+                	        
+			</div>
+		</td>
+		<td class="MainCell" width="100%">
+			<div id="main">
+				
+<div id="post_detail">
+	<div class="post">
+		<div class="posthead">
+			<h2>
+				<a id="cb_post_title_url" class="singleposttitle" href="https://www.cnblogs.com/5iedu/p/5493296.html">第4章 创建型模式—工厂方法模式(2)</a>
+			</h2>
+ 			Posted on <span id="post-date">2016-05-14 20:42</span> <a href="https://www.cnblogs.com/5iedu/">浅墨浓香</a> 阅读(<span id="post_view_count">167</span>) 评论(<span id="post_comment_count">0</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=5493296" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/5iedu/p/5493296.html#" onclick="AddToWz(5493296);return false;">收藏</a>
+			<script type="text/javascript">var allowComments=true,cb_blogId=231128,cb_entryId=5493296,cb_blogApp=currentBlogApp,cb_blogUserGuid='41562de4-020f-e511-b908-9dcfd8948a71',cb_entryCreatedDate='2016/5/14 20:42:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+			
+		</div>
+		<div class="postbody"><div id="cnblogs_post_body" class="blogpost-body"><p><strong>2. </strong><strong>工厂方法模式</strong></p>
+<p><strong>2.1</strong><strong>工厂方法模式的定义</strong></p>
+<p>（1）定义一个用于<span style="color: #0000ff;"><strong>创建对象的接口</strong></span>，让<strong><span style="color: #ff0000;">子类决定实例化哪一个类</span></strong>，工厂模式使一个类的实例化延迟到其子类</p>
+<p align="center"><img src="./创建型模式—工厂方法模式(2)_files/772759-20160514204147234-1471006206.png" alt="">&nbsp;</p>
+<p><span style="color: #0000ff;">　　①Product：定义了工厂方法创建对象的接口。也就是实际需要使用的产品对象的接口</span></p>
+<p><span style="color: #0000ff;">　　②ConcreteProduct：具体的Product接口的实现对象。</span></p>
+<p><span style="color: #0000ff;">　　③Factory（Creator）：定义了工厂方法的抽象类并返回一个产品对象。</span></p>
+<p><span style="color: #0000ff;">　　④ConcreteCreator：具体的创建器对象，该类实现和覆盖了父工厂类声明的方法。返回一个具体的Product实例</span></p>
+<p><strong>（2）思考工厂方法模式</strong></p>
+<p>　　①工厂方法模式的<span style="color: #ff0000;"><strong>本质</strong></span>：<span style="color: #0000ff;"><strong>延迟到子类来选择实现</strong></span>。简单工厂是直接在工厂类进行“选择实现”，而工厂方法会把这个工作延迟到子类来实现。由于工厂类依赖于抽象而不是具体的实现，从而系统更加灵活，具有更好的可维护性和可扩展性。</p>
+<p>　　②工厂方法模式是简单工厂模式的进一步抽象，它保持了简单工厂模式的优点，而且克服了它的缺点。在工厂方法模式中，<span style="color: #0000ff;"><strong>核心工厂类不再负责所有产品的创建</strong></span>，而是将具体的创建工作交给子类去做。这个<span style="color: #ff0000;"><strong>核心类仅仅负责给具体工厂必须实现的接口</strong></span>，而不负责哪一个产品被实例化这种细节，这使得工厂模式可以允许系统在不修改工厂角色的情况下引用新产品。</p>
+<p>　　③当系统扩展需要<span style="color: #ff0000;"><strong>添加新产品对象时</strong></span>，仅仅<span style="color: #0000ff;"><strong>需要添加一个具体产品对象以及一个具体工厂对象</strong></span>，<span style="color: #00ccff;"><strong>原有工厂对象不需要进行任何修改</strong></span>，也不需要修改客户端，很好地遵守了“开闭原则”，而简单工厂模式在添加新产品对象后不得不修改工厂方法，扩展性不好。</p>
+<p>【编程实验】利用工厂方法模式实现的计算器程序</p>
+<p>&nbsp;<img style="display: block; margin-left: auto; margin-right: auto;" src="./创建型模式—工厂方法模式(2)_files/772759-20160514233436030-643154705.png" alt=""></p>
+<div class="cnblogs_code" onclick="cnblogs_code_show(&#39;947d7dd3-448f-4790-bad2-c607c1b9b42f&#39;)"><img id="code_img_closed_947d7dd3-448f-4790-bad2-c607c1b9b42f" class="code_img_closed" src="./创建型模式—工厂方法模式(2)_files/ContractedBlock.gif" alt=""><img id="code_img_opened_947d7dd3-448f-4790-bad2-c607c1b9b42f" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide(&#39;947d7dd3-448f-4790-bad2-c607c1b9b42f&#39;,event)" src="./创建型模式—工厂方法模式(2)_files/ExpandedBlockStart.gif" alt="">
+<div id="cnblogs_code_open_947d7dd3-448f-4790-bad2-c607c1b9b42f" class="cnblogs_code_hide">
+<pre><span style="color: #008000;">//</span><span style="color: #008000;">创建型模式：工厂方法模式</span>
+<span style="color: #000000;">
+#include </span>&lt;stdio.h&gt;
+
+<span style="color: #008000;">//</span><span style="color: #008000;">运算类(其它的加减乘法类从这里继承)</span>
+<span style="color: #0000ff;">class</span><span style="color: #000000;"> COperator
+{
+</span><span style="color: #0000ff;">protected</span><span style="color: #000000;">:
+    </span><span style="color: #0000ff;">double</span><span style="color: #000000;"> mFirst;
+    </span><span style="color: #0000ff;">double</span><span style="color: #000000;"> mSecond;
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+    </span><span style="color: #0000ff;">void</span> setFirst(<span style="color: #0000ff;">double</span> value){mFirst =<span style="color: #000000;"> value;}
+    </span><span style="color: #0000ff;">double</span> getFirst(){<span style="color: #0000ff;">return</span><span style="color: #000000;"> mFirst;}
+    
+    </span><span style="color: #0000ff;">void</span> setSecond(<span style="color: #0000ff;">double</span> value){mSecond =<span style="color: #000000;"> value;}
+    </span><span style="color: #0000ff;">double</span> getSecond(){<span style="color: #0000ff;">return</span><span style="color: #000000;"> mSecond;}
+    
+    </span><span style="color: #0000ff;">virtual</span> <span style="color: #0000ff;">double</span> getResult(){<span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;} 
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">加法类</span>
+<span style="color: #0000ff;">class</span> CAdd : <span style="color: #0000ff;">public</span><span style="color: #000000;"> COperator
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+    </span><span style="color: #0000ff;">double</span><span style="color: #000000;"> getResult()
+    {
+        </span><span style="color: #0000ff;">return</span> mFirst +<span style="color: #000000;"> mSecond;
+    }    
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">减法类</span>
+<span style="color: #0000ff;">class</span> CSub : <span style="color: #0000ff;">public</span><span style="color: #000000;"> COperator
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">: 
+    </span><span style="color: #0000ff;">double</span><span style="color: #000000;"> getResult()
+    {
+        </span><span style="color: #0000ff;">return</span> mFirst -<span style="color: #000000;"> mSecond;
+    }    
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">乘法类</span>
+<span style="color: #0000ff;">class</span> CMul : <span style="color: #0000ff;">public</span><span style="color: #000000;"> COperator
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+    </span><span style="color: #0000ff;">double</span><span style="color: #000000;"> getResult()
+    {
+        </span><span style="color: #0000ff;">return</span> mFirst *<span style="color: #000000;"> mSecond;
+    }    
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">除法类</span>
+<span style="color: #0000ff;">class</span> CDiv : <span style="color: #0000ff;">public</span><span style="color: #000000;"> COperator
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">: 
+    </span><span style="color: #0000ff;">double</span><span style="color: #000000;"> getResult()
+    {
+         </span><span style="color: #0000ff;">const</span> <span style="color: #0000ff;">double</span> P = <span style="color: #800080;">0.000000000000001</span><span style="color: #000000;">;
+         </span><span style="color: #0000ff;">if</span>((-P &lt; mSecond) &amp;&amp; (mSecond&lt; P)) <span style="color: #008000;">//</span><span style="color: #008000;">除数不能为0</span>
+<span style="color: #000000;">         {
+            </span><span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+         }
+            
+        </span><span style="color: #0000ff;">return</span> mFirst /<span style="color: #000000;"> mSecond;
+    }    
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">工厂类（接口）</span>
+<span style="color: #0000ff;">class</span><span style="color: #000000;"> CFactory
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+    </span><span style="color: #0000ff;">virtual</span> COperator* createOperator() = <span style="color: #800080;">0</span>;<span style="color: #008000;">//</span><span style="color: #008000;">由子类去实现</span>
+<span style="color: #000000;">};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">加法工厂类</span>
+<span style="color: #0000ff;">class</span> CAddFactory : <span style="color: #0000ff;">public</span><span style="color: #000000;"> CFactory
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+    COperator</span>*<span style="color: #000000;"> createOperator()
+    {
+        </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> CAdd();
+    }
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">减法工厂类</span>
+<span style="color: #0000ff;">class</span> CSubFactory : <span style="color: #0000ff;">public</span><span style="color: #000000;"> CFactory
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+    COperator</span>*<span style="color: #000000;"> createOperator()
+    {
+        </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> CSub();
+    }
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">乘法工厂类</span>
+<span style="color: #0000ff;">class</span> CMulFactory : <span style="color: #0000ff;">public</span><span style="color: #000000;"> CFactory
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+    COperator</span>*<span style="color: #000000;"> createOperator()
+    {
+        </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> CMul();
+    }
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">除法工厂类</span>
+<span style="color: #0000ff;">class</span> CDivFactory : <span style="color: #0000ff;">public</span><span style="color: #000000;"> CFactory
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+    COperator</span>*<span style="color: #000000;"> createOperator()
+    {
+        </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> CDiv();
+    }
+};
+
+</span><span style="color: #0000ff;">int</span><span style="color: #000000;"> main()
+{
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">客户端调用例子
+    
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">客户端只需依赖COperator的接口类和工厂类，而无法知道具体的实现类
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">实现了客户端和具体实现类之间的解耦</span>
+    CFactory* ft= <span style="color: #0000ff;">new</span> CDivFactory(); <span style="color: #008000;">//</span><span style="color: #008000;">除法工厂</span>
+    COperator* oper =  ft-&gt;<span style="color: #000000;">createOperator(); 
+    oper</span>-&gt;setFirst(<span style="color: #800080;">1</span><span style="color: #000000;">);
+    oper</span>-&gt;setSecond(<span style="color: #800080;">2</span><span style="color: #000000;">);
+    
+    printf(</span><span style="color: #800000;">"</span><span style="color: #800000;">%f + %f = %f\n</span><span style="color: #800000;">"</span>, oper-&gt;getFirst(),oper-&gt;getSecond(),oper-&gt;<span style="color: #000000;">getResult());
+    
+    </span><span style="color: #0000ff;">delete</span><span style="color: #000000;"> oper;
+    </span><span style="color: #0000ff;">delete</span><span style="color: #000000;"> ft;
+    
+    </span><span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+}</span></pre>
+</div>
+<span class="cnblogs_code_collapse">View Code</span></div>
+<p><strong style="line-height: 1.5;">2.2 </strong><strong style="line-height: 1.5;">工厂模式的优点</strong></p>
+<p>（1）良好的封装性，代码结构清晰。客户端不需要创建具体产品对象的艰辛过程，降低模块间的耦合。</p>
+<p>（2）其次，工厂方法模式的扩展性非常优秀。在<span style="color: #ff0000;"><strong>增加产品类的情况下</strong></span>，只要适当修改具体的工厂类或<span style="color: #ff0000;"><strong>扩展一个工厂类</strong></span>，就可以完成“<span style="color: #0000ff;"><strong>拥抱变化</strong></span>”。</p>
+<p>（3）<span style="color: #ff0000;"><strong>屏蔽产品类</strong></span>。产品类的实现，调用者不需要关心，它只需要关心产品接口，只要接口保持不变，系统中的上层模块就不要发生变化。</p>
+<p>（4）工厂方法模式是典型的<span style="color: #0000ff;"><strong>解耦框架</strong></span>。高层模块只需要知道产品的抽象类，其他的实现类不用关心，符合迪米特法则，也符合依赖倒置原则。</p>
+<p>【编程实验】利用工厂方法实现导出各种类型文件</p>
+<p align="center"><img src="./创建型模式—工厂方法模式(2)_files/772759-20160514204132421-803379016.png" alt=""></p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./创建型模式—工厂方法模式(2)_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008000;">//</span><span style="color: #008000;">创建型模式：工厂模式
+</span><span style="color: #008000;">//</span><span style="color: #008000;">利用工厂模式实现导出各种类型的文件</span>
+<span style="color: #000000;">
+#include </span>&lt;stdio.h&gt;
+
+<span style="color: #008000;">//</span><span style="color: #008000;">导出文件接口类（抽象产品类）</span>
+<span style="color: #0000ff;">class</span><span style="color: #000000;"> CExportFileApi
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+    </span><span style="color: #0000ff;">virtual</span> <span style="color: #0000ff;">bool</span> Export(<span style="color: #0000ff;">const</span> <span style="color: #0000ff;">char</span>* data) = <span style="color: #800080;">0</span><span style="color: #000000;">;   
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">导出文本文件（实现导出接口类）</span>
+<span style="color: #0000ff;">class</span> CExportTxtFile : <span style="color: #0000ff;">public</span><span style="color: #000000;"> CExportFileApi
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+    </span><span style="color: #0000ff;">bool</span> Export(<span style="color: #0000ff;">const</span> <span style="color: #0000ff;">char</span>*<span style="color: #000000;"> data)
+    {
+        printf(</span><span style="color: #800000;">"</span><span style="color: #800000;">Export data \"%s\" to txt file!\n</span><span style="color: #800000;">"</span><span style="color: #000000;">,data);
+    }    
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">导出文件到数据库文件（实现导出接口的类）</span>
+<span style="color: #0000ff;">class</span> CExportDBFile: <span style="color: #0000ff;">public</span><span style="color: #000000;"> CExportFileApi
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+    </span><span style="color: #0000ff;">bool</span> Export(<span style="color: #0000ff;">const</span> <span style="color: #0000ff;">char</span>*<span style="color: #000000;"> data)
+    {
+        printf(</span><span style="color: #800000;">"</span><span style="color: #800000;">Export data \"%s\" to Database!\n</span><span style="color: #800000;">"</span><span style="color: #000000;">,data);
+    }    
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">生成导出文件对象的工厂类（抽象类）</span>
+<span style="color: #0000ff;">class</span><span style="color: #000000;"> CExportOperate
+{
+</span><span style="color: #0000ff;">protected</span><span style="color: #000000;">:
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">由工厂的子类去生成具体的产品类实例</span>
+    <span style="color: #0000ff;">virtual</span> CExportFileApi* factoryMethod()=<span style="color: #800080;">0</span>; <span style="color: #008000;">//</span><span style="color: #008000;">protected属性</span>
+    
+<span style="color: #0000ff;">public</span><span style="color: #000000;">:
+
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">这个方法将客户端与具体产品类解耦</span>
+    <span style="color: #0000ff;">bool</span> Export(<span style="color: #0000ff;">const</span> <span style="color: #0000ff;">char</span>*<span style="color: #000000;"> data) 
+    {
+        CExportFileApi</span>* api =<span style="color: #000000;"> factoryMethod();
+        
+        api</span>-&gt;<span style="color: #000000;">Export(data);
+        
+        </span><span style="color: #0000ff;">delete</span><span style="color: #000000;"> api;  
+    }    
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">生成导出文件对象的具体工厂（实现类）</span>
+<span style="color: #0000ff;">class</span> CExportTxtFileOperate : <span style="color: #0000ff;">public</span><span style="color: #000000;"> CExportOperate
+{
+</span><span style="color: #0000ff;">protected</span><span style="color: #000000;">:
+    CExportFileApi</span>*<span style="color: #000000;"> factoryMethod()
+    {
+        </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> CExportTxtFile;
+    }
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">生成导出文件对象的具体工厂（实现类）</span>
+<span style="color: #0000ff;">class</span> CExportDBOperate : <span style="color: #0000ff;">public</span><span style="color: #000000;"> CExportOperate
+{
+</span><span style="color: #0000ff;">protected</span><span style="color: #000000;">:
+    CExportFileApi</span>*<span style="color: #000000;"> factoryMethod()
+    {
+        </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> CExportDBFile;
+    }  
+};
+
+</span><span style="color: #0000ff;">int</span><span style="color: #000000;"> main()
+{    
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">客户端调用例子（注意只依赖工厂类接口与具体工厂类，而
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">与产品类及具体的产品的实现没有依赖关系，起到很好的解耦
+    
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">创建需要使用的Creator对象</span>
+    CExportOperate* oper = <span style="color: #0000ff;">new</span><span style="color: #000000;"> CExportDBOperate();
+    
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">调用输出数据的功能方法</span>
+    oper-&gt;Export(<span style="color: #800000;">"</span><span style="color: #800000;">abcd</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+    
+    </span><span style="color: #0000ff;">delete</span><span style="color: #000000;"> oper;
+        
+    </span><span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+}</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./创建型模式—工厂方法模式(2)_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p><strong>2.3 </strong><strong>工厂方法模式的使用场景</strong></p>
+<p>（1）工厂方法模式<span style="color: #ff0000;"><strong>是new一个对象的替代品</strong></span>，所以在所有需要生成对象的地方都可以使用，但需要慎重考虑是否要增加一个工厂类进行管理，增加代码的复杂度</p>
+<p>（2）需要灵活、可扩展的框架时，可以考虑采用工厂方法模式。</p>
+<p>（3）当子类可能会很多，以后需要不断增添不同的子类实现时。</p>
+<p>（4）如果<strong><span style="color: #ff0000;">一个类需要创建某个接口的对象</span>，<span style="color: #0000ff;">但是又不知道具体的实现时</span></strong>。可以选用工厂方法模式，把创建对象的工作延迟到子类中去实现。</p>
+<p>【编程实验】利用工厂方法模式实现多数据库的连接</p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="./创建型模式—工厂方法模式(2)_files/772759-20160516000503336-1018372964.png" alt="" width="735" height="358"></p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./创建型模式—工厂方法模式(2)_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008000;">//</span><span style="color: #008000;">创建型模式：工厂方法模式
+</span><span style="color: #008000;">//</span><span style="color: #008000;">利用工厂方法模式切换数据库</span>
+#include &lt;stdio.h&gt;
+
+<span style="color: #008000;">//</span><span style="color: #008000;">数据库连接对象</span>
+<span style="color: #0000ff;">class</span><span style="color: #000000;"> CConnection
+{
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">_ConnectionPtr m_pConn;</span>
+<span style="color: #0000ff;">public</span><span style="color: #000000;">:
+    CConnection(</span><span style="color: #0000ff;">const</span> <span style="color: #0000ff;">char</span>*<span style="color: #000000;"> connectionString){}
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">bool Open(CString ConnectionString,CString UserID,CString Password, ConnectOptionEnum ConnectOption)
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">bool Close();      </span>
+<span style="color: #000000;">};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">数据集对象</span>
+<span style="color: #0000ff;">class</span><span style="color: #000000;"> CRecordSet
+{   
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">抽象产品类</span>
+<span style="color: #0000ff;">class</span><span style="color: #000000;"> CAbstractDB
+{
+</span><span style="color: #0000ff;">protected</span><span style="color: #000000;">:
+   CConnection</span>*<span style="color: #000000;"> m_pConn;
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+    CAbstractDB(</span><span style="color: #0000ff;">const</span> <span style="color: #0000ff;">char</span>*<span style="color: #000000;"> connectionString)
+    {
+        printf(</span><span style="color: #800000;">"</span><span style="color: #800000;">%s\n</span><span style="color: #800000;">"</span><span style="color: #000000;">,connectionString);
+        m_pConn </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> CConnection(connectionString);
+    }
+    
+    </span>~<span style="color: #000000;">CAbstractDB()
+    {
+        </span><span style="color: #008000;">//</span><span style="color: #008000;">关闭数据库
+        </span><span style="color: #008000;">//</span><span style="color: #008000;">close();</span>
+        
+        <span style="color: #0000ff;">delete</span><span style="color: #000000;"> m_pConn;
+    }
+    
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">打开数据库连接</span>
+    <span style="color: #0000ff;">void</span><span style="color: #000000;"> open()
+    {
+        </span><span style="color: #0000ff;">if</span>(m_pConn !=<span style="color: #000000;"> NULL)
+        {
+            </span><span style="color: #008000;">//</span><span style="color: #008000;">m_pConn-&gt;Open();</span>
+            printf(<span style="color: #800000;">"</span><span style="color: #800000;">打开数据库连接！\n</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+        }     
+    }
+    
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">关闭数据库连接</span>
+    <span style="color: #0000ff;">void</span><span style="color: #000000;"> close()
+    {
+        </span><span style="color: #0000ff;">if</span>(m_pConn !=<span style="color: #000000;"> NULL)
+        {
+            </span><span style="color: #008000;">//</span><span style="color: #008000;">m_pConn-&gt;Close();</span>
+            printf(<span style="color: #800000;">"</span><span style="color: #800000;">关闭数据库连接！\n</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+        }     
+    }
+    
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">执行SQL语句，返回结果集</span>
+    <span style="color: #0000ff;">virtual</span> CRecordSet*  Execute(<span style="color: #0000ff;">const</span> <span style="color: #0000ff;">char</span>* commandText) = <span style="color: #800080;">0</span><span style="color: #000000;">;
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">MSSql数据库</span>
+<span style="color: #0000ff;">class</span> CMSSqlDB : <span style="color: #0000ff;">public</span><span style="color: #000000;"> CAbstractDB
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+    CMSSqlDB(</span><span style="color: #0000ff;">const</span> <span style="color: #0000ff;">char</span>*<span style="color: #000000;"> connectionStr):CAbstractDB(connectionStr){}
+    
+    CRecordSet</span>*  Execute(<span style="color: #0000ff;">const</span> <span style="color: #0000ff;">char</span>*<span style="color: #000000;"> commandText)
+    {
+        printf(</span><span style="color: #800000;">"</span><span style="color: #800000;">MSSql: %s\n</span><span style="color: #800000;">"</span><span style="color: #000000;">, commandText);
+        </span><span style="color: #0000ff;">return</span> NULL; <span style="color: #008000;">//</span><span style="color: #008000;">示例，实际中要返回结果集，new CRecordSet();</span>
+<span style="color: #000000;">    }    
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">Oracle数据库</span>
+<span style="color: #0000ff;">class</span> COracleDB : <span style="color: #0000ff;">public</span><span style="color: #000000;"> CAbstractDB
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+    COracleDB(</span><span style="color: #0000ff;">const</span> <span style="color: #0000ff;">char</span>*<span style="color: #000000;"> connectionStr):CAbstractDB(connectionStr){}
+    
+    CRecordSet</span>*  Execute(<span style="color: #0000ff;">const</span> <span style="color: #0000ff;">char</span>*<span style="color: #000000;"> commandText)
+    {
+        printf(</span><span style="color: #800000;">"</span><span style="color: #800000;">Oracle: %s\n</span><span style="color: #800000;">"</span><span style="color: #000000;">, commandText);
+        </span><span style="color: #0000ff;">return</span> NULL;<span style="color: #008000;">//</span><span style="color: #008000;">new CRecordSet();</span>
+<span style="color: #000000;">    }    
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">Access数据库</span>
+<span style="color: #0000ff;">class</span> CAccessDB : <span style="color: #0000ff;">public</span><span style="color: #000000;"> CAbstractDB
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+    CAccessDB(</span><span style="color: #0000ff;">const</span> <span style="color: #0000ff;">char</span>*<span style="color: #000000;"> connectionStr):CAbstractDB(connectionStr){}
+    
+    CRecordSet</span>*  Execute(<span style="color: #0000ff;">const</span> <span style="color: #0000ff;">char</span>*<span style="color: #000000;"> commandText)
+    {
+        printf(</span><span style="color: #800000;">"</span><span style="color: #800000;">Access: %s\n</span><span style="color: #800000;">"</span><span style="color: #000000;">, commandText);
+        </span><span style="color: #0000ff;">return</span> NULL;<span style="color: #008000;">//</span><span style="color: #008000;">new CRecordSet();</span>
+<span style="color: #000000;">    }    
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">工厂类</span>
+<span style="color: #0000ff;">class</span><span style="color: #000000;"> CDBFactory
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+   </span><span style="color: #0000ff;">virtual</span> CAbstractDB* createDB() = <span style="color: #800080;">0</span><span style="color: #000000;">;
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">MSSql工厂类</span>
+<span style="color: #0000ff;">class</span> CMSsqlDBFactory : <span style="color: #0000ff;">public</span><span style="color: #000000;"> CDBFactory
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+   CAbstractDB</span>*<span style="color: #000000;"> createDB()
+   {
+       </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span> CMSSqlDB(<span style="color: #800000;">"</span><span style="color: #800000;">MSSQL ConnectionString!\n</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+   }
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">Oracle工厂类</span>
+<span style="color: #0000ff;">class</span> COracleDBFactory : <span style="color: #0000ff;">public</span><span style="color: #000000;"> CDBFactory
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+   CAbstractDB</span>*<span style="color: #000000;"> createDB()
+   {
+       </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span> COracleDB(<span style="color: #800000;">"</span><span style="color: #800000;">Oracle ConnectionString!\n</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+   }
+};
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;">Access工厂类</span>
+<span style="color: #0000ff;">class</span> CAccessDBFactory : <span style="color: #0000ff;">public</span><span style="color: #000000;"> CDBFactory
+{
+</span><span style="color: #0000ff;">public</span><span style="color: #000000;">:
+   CAbstractDB</span>*<span style="color: #000000;"> createDB()
+   {
+       </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span> CAccessDB(<span style="color: #800000;">"</span><span style="color: #800000;">Access ConnectionString!</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+   }
+};
+
+</span><span style="color: #0000ff;">int</span><span style="color: #000000;"> main()
+{
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">客户端调用例子
+    
+    </span><span style="color: #008000;">//</span><span style="color: #008000;">利用工厂方法模式切换数据库</span>
+    CDBFactory* dbf = <span style="color: #0000ff;">new</span> CAccessDBFactory(); <span style="color: #008000;">//</span><span style="color: #008000;">在这里更改数据库！</span>
+    CAbstractDB* db = dbf-&gt;<span style="color: #000000;">createDB();
+    
+    db</span>-&gt;Execute(<span style="color: #800000;">"</span><span style="color: #800000;">Select * from demo</span><span style="color: #800000;">"</span><span style="color: #000000;">);
+    
+    </span><span style="color: #0000ff;">delete</span><span style="color: #000000;"> db;
+    </span><span style="color: #0000ff;">delete</span><span style="color: #000000;"> dbf;
+    
+    </span><span style="color: #0000ff;">return</span> <span style="color: #800080;">0</span><span style="color: #000000;">;
+}</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./创建型模式—工厂方法模式(2)_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p><strong>2.4 </strong><strong>工厂方法模式的扩展</strong></p>
+<p><strong>（1） 缩小为简单工厂模式</strong></p>
+<p>&nbsp;&nbsp;&nbsp; 当一个模块<span style="color: #0000ff;"><strong>仅需要一个工厂类时</strong></span>，就只需要使用具体工厂类并使用静态方法就可以了，去掉抽象类，于是就演<span style="color: #0000ff;"><strong>变成一个简单工厂类</strong></span></p>
+<p><strong>（2）升级为多个工厂类</strong></p>
+<p>&nbsp;&nbsp;&nbsp; 当一个产品类有<span style="color: #0000ff;"><strong>多个具体的实现</strong></span>，并且每个实现类的初始化方法（包括new和对对象设置初始值）的方法都不同时，可以<span style="color: #0000ff;"><strong>为每个具体实现定义相应的创建者</strong></span>，形成多个工厂。</p></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="https://www.cnblogs.com/5iedu/category/825371.html" target="_blank">设计模式</a></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(5493296,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;41562de4-020f-e511-b908-9dcfd8948a71&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./创建型模式—工厂方法模式(2)_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./创建型模式—工厂方法模式(2)_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/5iedu/" target="_blank"><img src="./创建型模式—工厂方法模式(2)_files/20150610151331.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/5iedu/">浅墨浓香</a><br>
+            <a href="http://home.cnblogs.com/u/5iedu/followees">关注 - 0</a><br>
+            <a href="http://home.cnblogs.com/u/5iedu/followers">粉丝 - 116</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;41562de4-020f-e511-b908-9dcfd8948a71&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(5493296,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(5493296,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="https://www.cnblogs.com/5iedu/p/5491639.html" class="p_n_p_prefix">« </a> 上一篇：<a href="https://www.cnblogs.com/5iedu/p/5491639.html" title="发布于2016-05-13 23:36">第4章 创建型模式—工厂方法模式(1)</a><br><a href="https://www.cnblogs.com/5iedu/p/5499351.html" class="p_n_p_prefix">» </a> 下一篇：<a href="https://www.cnblogs.com/5iedu/p/5499351.html" title="发布于2016-05-16 20:22">第5章 创建型模式—抽象工厂模式</a><br></div>
+</div>
+
+</div>
+	</div></div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/5iedu/p/5493296.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/5iedu/p/5493296.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-工控&#39;)">【推荐】超50万VC++源码: 大型组态工控、电力仿真CAD与GIS源码库！</a><br><a href="http://clickc.admaster.com.cn/c/a116493,b2949399,c1705,i0,m101,8a1,8b3,h" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-会员节&#39;)">【活动】华为云12.12会员节 云产品1折起 满额送Mate20 点击抢购</a><br><a href="https://cloud.tencent.com/act/southwest?fromSource=gwzcw.2017844.2017844.2017844" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-腾讯云&#39;)">【推荐】服务器100%基准CPU性能，1核1G首年168元，限时特惠！</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a href="https://cloud.tencent.com/act/special/amd?fromSource=gwzcw.1351353.1351353.1351353" target="_blank"><img width="300" height="250" src="./创建型模式—工厂方法模式(2)_files/24442-20181129113406214-695115565.jpg" alt="腾讯云1129" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;C1&#39;);"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>相关博文：</b><br>·  <a href="https://www.cnblogs.com/dooom/archive/2010/12/22/1914252.html" target="_blank" onclick="clickRecomItmem(1914252,&#39;hHqq/uV4fmz1/FJyrAQ4Qag+EUHNd6UCZuxkgaheK43fm/7U0PMh6mfeSApHxseMrCTztG2N8PWcXDmFknnzNodXuQ5BPwoEthYjfishIeDbk7HRknJu+PxG2Y+pjU5jPEZSicUpBqgAFIsgynMkQNeRqIeNgOurmUfPWXEOqvOo/OU=&#39;)">创建型模式-工厂方法模式</a><br>·  <a href="https://www.cnblogs.com/dongkuo/p/4939628.html" target="_blank" onclick="clickRecomItmem(4939628,&#39;yfxHxh/T3d4P7eMTd1nqw1wpxXWvXpSVIOUzsQpNGEziYHOjZKWawzBZyP2Bj2AavezVx+eTiEBJ8ez/i2DJP6nWq5hHFD1n9lnRgSo8YUegkoaE1kbfxiCTfa6Nc7ED4voN6tEKu3S+gvLN/xB9SdufrcMgIXtX1mECs1gvt88Y1o8=&#39;)">工厂方法模式——创建型模式02</a><br>·  <a href="https://www.cnblogs.com/cody1988/archive/2012/04/20/2459346.html" target="_blank" onclick="clickRecomItmem(2459346,&#39;cFgPXu2t4hHpfXRWlbQ5QisOpdKSygYBFL8VaQOv/xB2VQEkAXeXUILTp02gRwUswVgfK1GvsmDZn362QR5BvUeSlsDETsfPncO/vAqCEgt9WlRml2pMQsQtjp4G+JVpTLadV8X1xxC+zLbq3aEdtmhbmRY+yqhMGQ62sNoxs8zv18Q=&#39;)">创建型模式之工厂方法模式</a><br>·  <a href="https://www.cnblogs.com/feihe0755/p/3505594.html" target="_blank" onclick="clickRecomItmem(3505594,&#39;GT7T+oVv3OPpYlsaWqbcyKA0O2MMCkN0i2nGo/I2XNY7GJrTmxCVbUmuH8alz5e+6ACGyeHtAQVEfnyhCXBxEh6r8F1uCpDjCyzxu58w3ptWt/By9/wWa4StooV/on/m7WFg4xqnvPZjd0Tg6amSBJKYhTCvzJvqopmLUpuBwiWJkNc=&#39;)">设计模式2——创建型模式之工厂方法模式</a><br>·  <a href="https://www.cnblogs.com/JackyTecblog/archive/2012/09/18/2691171.html" target="_blank" onclick="clickRecomItmem(2691171,&#39;sES+ctUheDiG3V9nVgkfDxajptR3vzcDmHu1CsplYJeZvMiif9tkf6NxdLAmV4o+XXhlCbfnI/jFmugdbnopSJmOcDPrkvl+QUAmXUJEBnuw82GV4+rrgKK53JGfQDnl4KcAtOtp4aQrc3w7d5TDIfS6zU4hOTZ9/xi20IrKkit0XoQ=&#39;)">抽象工厂方法模式——创建型模式（2）</a><br></div></div>
+<script async="async" src="./创建型模式—工厂方法模式(2)_files/gpt.js"></script>
+<script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+
+<script>
+  googletag.cmd.push(function() {
+    googletag.defineSlot('/1090369/C2', [468, 60], 'div-gpt-ad-1539008685004-0').addService(googletag.pubads());
+    googletag.pubads().enableSingleRequest();
+    googletag.enableServices();
+  });
+</script>
+<div id="cnblogs_c2" class="c_ad_block">
+    <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+    <script>
+    if (new Date() >= new Date(2018, 9, 13)) {
+        googletag.cmd.push(function() { googletag.display('div-gpt-ad-1539008685004-0'); });
+    }
+    </script>
+    </div>
+</div>
+<div id="under_post_kb"><div class="itnews c_ad_block"><b>热门推荐：</b><br>·  <a href="https://www.cnblogs.com/jianxuewei/p/9144652.html" target="_blank" onclick="clickRecomItmemHot(9144652,&#39;045rFd/x5u3fbSO1CWTqGp62CdULU6UHEhZK0URsOFzROMX7hCArtK0TMmGprAGCoGpoic7iCa6uHFdcVGKyR3ypn3IwBndHZxhb02zD4rGYhWsgTZdwYzxQ8r7ameT840MO8CA=&#39;)">菜鸟理解的区块链（一）</a><br>·  <a href="https://www.cnblogs.com/anquanniu/p/9447818.html" target="_blank" onclick="clickRecomItmemHot(9447818,&#39;IQw6aPnrNmKu4zQahynEoT6t6dquksXMegkeUMnTI2ak4qqwOdKTmd4tA9Mmf53yj3+TFbSGKWpyAq1TrdnsZTl4v1nAdY3l2rf5o9iURbiwgTGNqb47zwqOcghl7ItnlOPzTdU=&#39;)">“暗网”真的如传言般可怕吗？这是一份《暗网指南》</a><br>·  <a href="https://www.cnblogs.com/whw19818/p/6346805.html" target="_blank" onclick="clickRecomItmemHot(6346805,&#39;5L8zu8ACQT9gk8QFpGu1KFSvLjxf1MR4BUbfnxOmaEq/cU295nyzpvunTimzSsxwo0SBrPAVVBCtgZPEA6nSgf4CQ/M6nsopieRykZFbh56v0Kvlc+0MHxWActV/1YJ2SqRVLcc=&#39;)">如果看了此文你还不懂傅里叶变换，那就过来掐死我吧【完整版】</a><br>·  <a href="https://www.cnblogs.com/zhanglin123/p/8480900.html" target="_blank" onclick="clickRecomItmemHot(8480900,&#39;FS7jHkL2D8V7xNQGn9VxJHTE5mSHlXlL57WjulyG/y4ImTR2OiwNcgMwpCz0M0koU5DK7Z1xCG2GmTa5Hys32S9eua121yJKHwqARBul2RfJY5mUxLxFV+vhImRN2SAeJNOWd88=&#39;)">Pycharm中如何安装python库</a><br>·  <a href="https://www.cnblogs.com/ios9/p/9527815.html" target="_blank" onclick="clickRecomItmemHot(9527815,&#39;rD3fxYIboPluoMJPeXL2FKGSRT035PXriuE84gAbTLvc3KDHwWZ/nw4cU8zgd2hqDWNAAt/1ZbLjVsO7nJL306v4SFvMRwNV/LlteuovY2IoZAjE1X9BKkaBClbb5c/wRW1BXZA=&#39;)">SQL Server 2012-2016-2017 简体中文版下载和序列号</a><br></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" class="FooterCell">
+			
+<p id="footer">
+	Powered by: 
+	<br>
+	
+	<a id="Footer1_Hyperlink3" name="Hyperlink1" href="https://www.cnblogs.com/" style="font-family:Verdana;font-size:12px;">博客园</a>
+	<br>
+	Copyright © 浅墨浓香
+</p>
+		</td>
+	</tr>
+</tbody></table>
+
+
+
+
+</body></html>
