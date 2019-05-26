@@ -126,7 +126,7 @@ int main()
     printf("\n StringBad sailor = sports \n");
     StringBad sailor = sports;
 
-    printf("\n StringBad also = StringBad(sports)");
+    printf("\n StringBad also = StringBad(sports)\n");
     StringBad also = StringBad(sports);
 
     printf("\n StringBad *ptest = new StringBad(sports)");

@@ -11,6 +11,9 @@ StringBad::StringBad(const char *s){
     std::strcpy(str, s);
     num_strings++;
     printf("this:%p ",this);
+    for(int i=0; i<12; i++){
+        printf("test_array[%d]:%d\n", i, test_array[i]);
+    }
     cout <<num_strings<<":"<<str<<"-->object created\n";
 }
 

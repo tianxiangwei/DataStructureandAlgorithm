@@ -10,6 +10,7 @@ class StringBad
         int len;
         static int num_strings;
         static const int CINLIM=80;
+        int test_array[12] = {1};
     public:
         void *test;
         StringBad(const char *s);
