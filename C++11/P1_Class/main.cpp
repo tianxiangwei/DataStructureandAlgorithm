@@ -2,6 +2,7 @@
 #include <iostream>
 #include "string_test.h"
 #include <vector>
+#include <unistd.h>
 void callme1(StringBad &);
 void callme2(StringBad);
 
@@ -55,7 +56,14 @@ int main()
     cout<<name<<endl;
     printf("name:%p\n",name);
     cout<<""<<endl;
+    int test_value = 10;
+    int test_value1 = 20;
+    printf("stack adress: test_value:%p test_value:%p\n", &test_value, &test_value1);
 
+    int *test_array = new int(3) ;
+    int *test_array1 = (int *)malloc(3*sizeof(int));
+    printf("heap adress: test_arrary:%p test_array1:%p\n", test_array, test_array1);
+    cout << "vector Test:" <<endl; 
     std:;vector<StringBad> _data_buffer;
     std::vector<StringBad *> _circur_buffer;
     //cout<<"begin to resize, default constructor"<<endl;
@@ -65,6 +73,7 @@ int main()
     //事先给vector分配好内存，不会在第二次push_back时对第一次push_back的值进行拷贝构造
     _data_buffer.reserve(2);
     cout<<"\nbegin to push back"<<endl;
+    //伴随栈上临时对象的创建，以及vector上堆上空间的分配，同时调用拷贝构造函数将临时对象赋值给对上开辟的对象，栈对象自动析构
     _data_buffer.push_back(StringBad("test1 node"));
     _data_buffer.push_back(StringBad("test2 node"));
     printf("capacity:%lu size:%lu\n", _data_buffer.capacity(), _data_buffer.size());
@@ -158,5 +167,7 @@ int main()
     cout<<"\nExiting the main"<<endl;
     cout<<"order of deconstructor rever of constructor"<<endl;
     delete ptest;
-    return 0;
+    while(1){
+        sleep(1);
+    }
 }
