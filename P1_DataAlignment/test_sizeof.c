@@ -54,6 +54,39 @@ struct name2
 };
 
 #define SQUARE(a) ((a)*(a))
+
+
+#define __u8 unsigned char 
+#define __u16 unsigned short
+struct str_struct{
+        __u8    a;
+        __u8    b;
+        __u8    c;
+        __u16   d;
+} __attribute__ ((packed));
+
+typedef struct {
+        __u8    a;
+        __u8    b;
+        __u8    c;
+        __u16   d;
+} __attribute__ ((packed)) str;
+
+typedef struct {
+        __u8    a;
+        __u8    b;
+        __u8    c;
+        __u16   d;
+}str_temp __attribute__ ((packed));
+
+typedef struct {
+        __u8    a;
+        __u8    b;
+        __u8    c;
+        __u16   d;
+}str_nopacked;
+
+
 	int
 main ( int argc, char *argv[] )
 {
@@ -61,6 +94,11 @@ main ( int argc, char *argv[] )
 	struct data too;
 	int a=5;
 	int b;
+
+    printf("%d\n", sizeof(struct str_struct));
+    printf("%d \n", sizeof(str));
+    printf("%d \n", sizeof(str_temp));
+    printf("%d\n", sizeof(str_nopacked));
 	b=SQUARE(a++);
 	printf("b:%d\n",b);
 	printf("sizeof(max):%d,sizeof(struct data):%d sizeof(too):%d\n",\
